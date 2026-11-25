@@ -1,7 +1,12 @@
 # Wok & Wonder: Night Market Rush
 
+[![make.fun · best-cooking-game-20261125-0137](https://make.fun/badge/best-cooking-game-20261125-0137.svg)](https://make.fun/bounty/best-cooking-game-20261125-0137?utm_source=github&utm_medium=readme&utm_campaign=best-cooking-game-20261125-0137)
+[![rank](https://make.fun/badge/best-cooking-game-20261125-0137/baddairdrop-svg/wok-and-wonder/rank.svg)](https://make.fun/bounty/best-cooking-game-20261125-0137/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=best-cooking-game-20261125-0137)
+[![reward](https://make.fun/badge/best-cooking-game-20261125-0137/baddairdrop-svg/wok-and-wonder/reward.svg)](https://make.fun/bounty/best-cooking-game-20261125-0137?utm_source=github&utm_medium=readme&utm_campaign=best-cooking-game-20261125-0137)
+
 An original night-market cooking game for the make.fun bounty
-**best-cooking-game-20261125-0137**, built by **@badd-airdrop2**.
+[best-cooking-game-20261125-0137](https://make.fun/bounty/best-cooking-game-20261125-0137),
+built by **@badd-airdrop2**.
 
 ![Cover — a rush in full swing](screenshots/1-rush.jpg)
 
