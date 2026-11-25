@@ -66,12 +66,16 @@ export function stageShot(world, name) {
     world.tray = [
       { id: 'friedEgg', quality: 92, fresh: 96 },
       { id: 'herbSalad', quality: 88, fresh: 90 },
+      { id: 'springRolls', quality: 84, fresh: 88 },
     ];
     world.plate = [
       { id: 'wokNoodles', quality: 88, fresh: 97 },
       { id: 'friedEgg', quality: 92, fresh: 96 },
     ];
-    world.setMessage('The noodle bowl needs its herb salad — one click from a serve!');
+    // A just-served PERFECT dish is still floating off the plate — the
+    // reward loop, visible in the very first frame a judge sees.
+    world.floaters = [{ text: '+185', sub: 'PERFECT · tip +57', grade: 'PERFECT', t: 0.25, life: 1.7 }];
+    world.setMessage('PERFECT! The noodle bowl needs its herb salad — one click from another serve!');
     return true;
   }
   return false;

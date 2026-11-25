@@ -205,8 +205,12 @@ function drawHeader(ctx, world) {
 
 function drawTickets(ctx, world, t) {
   for (let i = 0; i < world.maxOrders(); i += 1) {
-    const rect = ticketRect(i);
+    const baseRect = ticketRect(i);
     const order = world.orders[i];
+    // Fresh tickets slide in from the right and settle — the rail feels alive.
+    const age = order ? world.elapsed - (order.born ?? 0) : 1;
+    const slide = age < 0.35 ? (0.35 - age) * 160 : 0;
+    const rect = { ...baseRect, x: baseRect.x + slide };
     if (!order) {
       ctx.strokeStyle = 'rgba(253,246,227,0.25)';
       ctx.setLineDash([6, 6]);
@@ -374,6 +378,13 @@ function drawStationCard(ctx, world, stationId, index, t) {
     ctx.fillRect(-3, 6, 6, 14);
     ctx.restore();
     if (job) drawFood(ctx, job.comp, cx - 12, cy + 8, 18);
+  }
+  // A finished dish pulses a ring so the eye catches it before it burns.
+  if (job && job.phase === 'ready') {
+    const pulse = (t * 1.4 + index * 0.3) % 1;
+    ctx.strokeStyle = `rgba(127,194,74,${0.75 * (1 - pulse)})`;
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(cx, cy, 30 + pulse * 22, 0, Math.PI * 2); ctx.stroke();
   }
   // Cooking progress arc.
   if (job && job.phase === 'cooking') {
@@ -582,12 +593,30 @@ function drawTitle(ctx, world, t) {
     ctx.fillStyle = '#ffd98a';
     ctx.beginPath(); ctx.ellipse(lx + sway, 84 * s, 9 * s, 30 * s, 0, 0, Math.PI * 2); ctx.fill();
   }
+  ctx.save();
+  ctx.shadowColor = 'rgba(255,201,60,0.55)';
+  ctx.shadowBlur = 26;
   text(ctx, 'WOK & WONDER', VIEW.width / 2, 138, 62, GOLD);
+  ctx.restore();
   text(ctx, 'N I G H T   M A R K E T   R U S H', VIEW.width / 2, 182, 21, '#ffd98a');
   text(ctx, 'Ride the heat, plate with pride, and feed the whole market before their patience runs out.', VIEW.width / 2, 216, 15.5, '#e8dcc0', 'center', false);
-  text(ctx, `BANK ${world.bank} coins · ${world.upgrades.size} upgrades owned${world.bestEndless > 0 ? ` · Best endless ${world.bestEndless}` : ''}`, VIEW.width / 2, 244, 14, '#b8a8d0', 'center', false);
+  // Feature chips: the whole game in one glance, right under the subtitle.
+  const chips = ['5 STATIONS', '12 RECIPES', '3 MARKETS', '10 UPGRADES', 'VIP + RUSH HOURS', 'ENDLESS MODE'];
+  ctx.font = '700 11.5px "Trebuchet MS", "Segoe UI", sans-serif';
+  const chipWidths = chips.map((c) => ctx.measureText(c).width + 22);
+  let chipX = VIEW.width / 2 - chipWidths.reduce((a, b) => a + b + 8, -8) / 2;
+  chips.forEach((chip, i) => {
+    ctx.fillStyle = 'rgba(23,16,33,0.85)';
+    rr(ctx, chipX, 230, chipWidths[i], 22, 11); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,201,60,0.6)';
+    ctx.lineWidth = 1;
+    rr(ctx, chipX, 230, chipWidths[i], 22, 11); ctx.stroke();
+    text(ctx, chip, chipX + chipWidths[i] / 2, 241.5, 11.5, '#ffd98a');
+    chipX += chipWidths[i] + 8;
+  });
+  text(ctx, `BANK ${world.bank} coins · ${world.upgrades.size} upgrades owned${world.bestEndless > 0 ? ` · Best endless ${world.bestEndless}` : ''}`, VIEW.width / 2, 270, 14, '#b8a8d0', 'center', false);
   // Location cards.
-  text(ctx, 'CHOOSE YOUR MARKET', VIEW.width / 2, 276, 13, '#9a8ab0');
+  text(ctx, 'CHOOSE YOUR MARKET', VIEW.width / 2, 290, 13, '#9a8ab0');
   TITLE_UI.locCards.forEach((rect, i) => {
     const loc = LOCATIONS[i];
     const locked = i > world.unlockedLoc;

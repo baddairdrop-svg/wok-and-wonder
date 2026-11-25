@@ -125,6 +125,7 @@ export class World {
     this.rushMarks = [108, 52];
     this.magnetUsed = false;
     this.floaters = [];
+    this.hintedCook = false;
     this.lastServe = null;
     this.message = 'The lanterns are lit — first customers incoming!';
     this.shake = 0;
@@ -159,7 +160,7 @@ export class World {
     let patience = loc.patience * diff.patience * (this.hasUpgrade('cushions') ? 1.2 : 1);
     if (vip) patience *= 0.72;
     orderSerial += 1;
-    return { id: orderSerial, recipe, vip, patience, maxPatience: patience };
+    return { id: orderSerial, recipe, vip, patience, maxPatience: patience, born: this.elapsed ?? 0 };
   }
 
   // -- cooking ---------------------------------------------------------------
@@ -187,6 +188,10 @@ export class World {
       return false;
     }
     station.job = { comp: compId, progress: 0, quality: 70, phase: 'cooking', grace: 0 };
+    if (!this.hintedCook) {
+      this.hintedCook = true;
+      this.setMessage('Keep the heat needle in the green — quality climbs there! Collect the moment it is ready.');
+    }
     return true;
   }
 
